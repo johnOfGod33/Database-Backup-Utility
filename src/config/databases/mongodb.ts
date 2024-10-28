@@ -24,14 +24,16 @@ export default class MongoDb {
     const client = new MongoClient(uri);
 
     try {
+      console.log(chalk.yellow(`Starting connection test to : ${uri}`));
+
       await client.connect();
 
-      console.info(chalk.green("Connected to MongoDB database"));
-    } catch (error: any) {
-      console.error(`Error connecting to the database: ${error.message}`);
+      console.info(chalk.green("Test sucess"));
+    } catch (err: any) {
+      console.error(`Failed to connect to database`);
+      console.error(`Error : ${err.message}`);
     } finally {
       await client.close();
-      console.log(chalk.green("close mongodb connection"));
     }
   }
 }
