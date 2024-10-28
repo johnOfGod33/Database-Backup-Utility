@@ -4,7 +4,7 @@ import MySql from "../config/databases/mysql.js";
 import Psql from "../config/databases/psql.js";
 
 const getDatabaseInstance = (
-  type: string,
+  type: string | undefined,
   params: DatabaseParams
 ): MySql | MongoDb | Psql | null => {
   if (type === "mongodb") {
