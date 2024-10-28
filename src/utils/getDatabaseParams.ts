@@ -7,7 +7,7 @@ const getDatabaseParams = async (): Promise<DatabaseParams | null> => {
       {
         type: "list",
         name: "type",
-        message: "Type of database to back up?",
+        message: "Type of database to back up",
         choices: ["mongodb", "mysql", "postgresql", "sqlite"],
         default: "mongodb",
       },

@@ -5,8 +5,8 @@ import { hideBin } from "yargs/helpers";
 import figlet from "figlet";
 import chalk from "chalk";
 import boxen from "boxen";
-import MongoDb from "./config/databases/mongodb.js";
 import getDatabaseInstance from "./utils/getDatabaseInstance.js";
+import getDatabaseParams from "./utils/getDatabaseParams.js";
 
 console.log(
   boxen(
@@ -61,21 +61,31 @@ const cli = yargs(hideBin(process.argv)).command(
   },
   (argv) => {
     (async () => {
+      const answers = await getDatabaseParams();
+
+      if (!answers) {
+        console.error(
+          "Backup configuration was not completed due to an error."
+        );
+        return;
+      }
+
       const databaseParams = {
-        username: argv.username,
-        password: argv.password,
-        host: argv.host,
-        port: argv.port,
-        database: argv.database,
+        username: answers.username,
+        password: answers.password,
+        host: answers.host,
+        port: answers.port,
+        database: answers.database,
       };
 
-      const dbInstance = getDatabaseInstance(argv.type, databaseParams);
+      const dbInstance = getDatabaseInstance(answers.type, databaseParams);
 
       if (!dbInstance) {
         console.error("Unknown database");
-      } else {
-        await dbInstance.connection();
+        return;
       }
+
+      await dbInstance.connection();
     })();
   }
 );
