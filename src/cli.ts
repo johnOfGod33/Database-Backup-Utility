@@ -6,7 +6,7 @@ import figlet from "figlet";
 import chalk from "chalk";
 import boxen from "boxen";
 import MongoDb from "./config/databases/mongodb.js";
-import { getDatabaseParams } from "./config/databaseParams.js";
+import getDatabaseInstance from "./utils/getDatabaseInstance.js";
 
 console.log(
   boxen(
@@ -61,19 +61,17 @@ const cli = yargs(hideBin(process.argv)).command(
   },
   (argv) => {
     (async () => {
-      const databaseParams = getDatabaseParams(
-        argv.username,
-        argv.password,
-        argv.host,
-        argv.port,
-        argv.database
-      );
+      const databaseParams = {
+        username: argv.username,
+        password: argv.password,
+        host: argv.host,
+        port: argv.port,
+        database: argv.database,
+      };
 
-      const mongodb = new MongoDb(databaseParams);
+      const dbInstance = getDatabaseInstance(argv.type, databaseParams);
 
-      console.info("Connection Testing:");
-
-      await mongodb.connection();
+      await dbInstance.connection();
     })();
   }
 );
