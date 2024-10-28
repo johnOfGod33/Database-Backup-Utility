@@ -6,7 +6,7 @@ import Psql from "../config/databases/psql.js";
 const getDatabaseInstance = (
   type: string,
   params: DatabaseParams
-): MySql | MongoDb | Psql => {
+): MySql | MongoDb | Psql | null => {
   if (type === "mongodb") {
     return new MongoDb(params);
   }

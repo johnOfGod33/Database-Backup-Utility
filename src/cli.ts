@@ -71,7 +71,11 @@ const cli = yargs(hideBin(process.argv)).command(
 
       const dbInstance = getDatabaseInstance(argv.type, databaseParams);
 
-      await dbInstance.connection();
+      if (!dbInstance) {
+        console.error("Unknown database");
+      } else {
+        await dbInstance.connection();
+      }
     })();
   }
 );
