@@ -1,6 +1,8 @@
 import { DatabaseParams } from "../databaseParams.js";
-import { Client } from "pg";
+import pg from "pg";
 import chalk from "chalk";
+
+const { Client } = pg;
 
 export default class Psql {
   private databaseParams: DatabaseParams;
