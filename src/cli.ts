@@ -7,6 +7,7 @@ import chalk from "chalk";
 import boxen from "boxen";
 import getDatabaseInstance from "./utils/getDatabaseInstance.js";
 import getDatabaseParams from "./utils/getDatabaseParams.js";
+import { exec } from "child_process";
 
 console.log(
   boxen(
@@ -86,6 +87,18 @@ const cli = yargs(hideBin(process.argv)).command(
       }
 
       await dbInstance.connection();
+
+      exec(dbInstance.getBackupCommand(), (err, stdout, stderr) => {
+        if (err) {
+          console.error(err.message);
+          return;
+        }
+
+        if (stderr) {
+          console.info(chalk.yellow(stderr));
+        }
+        console.info(chalk.green("dump succes", stdout));
+      });
     })();
   }
 );
