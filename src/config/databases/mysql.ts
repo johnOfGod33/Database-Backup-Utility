@@ -29,4 +29,8 @@ export default class MySql {
       database.end();
     }
   }
+
+  getBackupCommand() {
+    return `mysqldump --databases ${this.databaseParams.database} > ./Backup/mongodb/${this.databaseParams.database}.sql`;
+  }
 }

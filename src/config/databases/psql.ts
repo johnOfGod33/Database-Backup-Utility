@@ -29,4 +29,7 @@ export default class Psql {
       client.end();
     }
   }
+  getBackupCommand() {
+    return "";
+  }
 }
