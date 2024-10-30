@@ -8,6 +8,7 @@ import boxen from "boxen";
 import getDatabaseInstance from "./utils/getDatabaseInstance.js";
 import getDatabaseParams from "./utils/getDatabaseParams.js";
 import { exec } from "child_process";
+import compression from "./utils/compression.js";
 
 console.log(
   boxen(
@@ -86,19 +87,17 @@ const cli = yargs(hideBin(process.argv)).command(
         return;
       }
 
-      exec(dbInstance.getBackupCommand(), (err, stdout, stderr) => {
-        if (err) {
-          console.error(err.message);
-          return;
-        }
+      const backupProcess = exec(dbInstance.getBackupCommand());
 
-        if (stderr) {
-          console.info(chalk.yellow(stderr));
-        }
+      if (backupProcess.stdout) {
+        await compression(backupProcess.stdout, `${answers.database}.gz`);
+
         console.info(
-          chalk.green(`BACKUP OF ${answers.database} SUCCESS`, stdout)
+          chalk.green(`BACKUP AND COMPRESSIOIN OF ${answers.database} SUCCESS`)
         );
-      });
+      } else {
+        console.error("Failed to initiate backup proces");
+      }
     })();
   }
 );
