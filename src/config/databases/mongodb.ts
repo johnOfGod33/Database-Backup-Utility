@@ -12,7 +12,7 @@ export default class MongoDb {
       this.databaseParams.host === "localhost" ||
       this.databaseParams.host == "127.0.0.1"
     ) {
-      return `mongodump -d ${this.databaseParams.database} -o ./Backup/mongodb/${this.databaseParams.database}`;
+      return `mongodump -d ${this.databaseParams.database} -o ${this.databaseParams.database}`;
     }
     return `mongodump -h ${this.databaseParams.host}:${this.databaseParams.port} -d ${this.databaseParams.database} -u ${this.databaseParams.username} -p ${this.databaseParams.password} -o ./Backup/mongodb/${this.databaseParams.database}`;
   }
