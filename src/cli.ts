@@ -82,11 +82,9 @@ const cli = yargs(hideBin(process.argv)).command(
       const dbInstance = getDatabaseInstance(answers.type, databaseParams);
 
       if (!dbInstance) {
-        console.error("Unknown database");
+        console.error("UNKNOWN DATABASES");
         return;
       }
-
-      await dbInstance.connection();
 
       exec(dbInstance.getBackupCommand(), (err, stdout, stderr) => {
         if (err) {
@@ -97,7 +95,9 @@ const cli = yargs(hideBin(process.argv)).command(
         if (stderr) {
           console.info(chalk.yellow(stderr));
         }
-        console.info(chalk.green("dump succes", stdout));
+        console.info(
+          chalk.green(`BACKUP OF ${answers.database} SUCCESS`, stdout)
+        );
       });
     })();
   }
