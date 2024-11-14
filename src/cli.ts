@@ -9,6 +9,8 @@ import getDatabaseInstance from "./utils/getDatabaseInstance.js";
 import getDatabaseParams from "./utils/getDatabaseParams.js";
 import { exec } from "child_process";
 import compression from "./utils/compression.js";
+import authorize from "./utils/googleDriveApi/authorize.js";
+import uploadFile from "./utils/googleDriveApi/uploadFile.js";
 
 console.log(
   boxen(
@@ -90,11 +92,19 @@ const cli = yargs(hideBin(process.argv)).command(
       const backupProcess = exec(dbInstance.getBackupCommand());
 
       if (backupProcess.stdout) {
-        await compression(backupProcess.stdout, `${answers.database}.gz`);
+        const filePath = `${answers.database}.gz`;
+        await compression(backupProcess.stdout, filePath);
 
         console.info(
           chalk.green(`BACKUP AND COMPRESSIOIN OF ${answers.database} SUCCESS`)
         );
+
+        try {
+          const client = await authorize();
+          await uploadFile(filePath, filePath, client);
+        } catch (err: any) {
+          console.error("UPLOAD OF FILE FAILED :", err.message);
+        }
       } else {
         console.error("Failed to initiate backup proces");
       }
