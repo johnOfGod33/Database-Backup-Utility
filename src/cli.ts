@@ -11,6 +11,11 @@ import { exec } from "child_process";
 import compression from "./utils/compression.js";
 import authorize from "./utils/googleDriveApi/authorize.js";
 import uploadFile from "./utils/googleDriveApi/uploadFile.js";
+import createCredentialsFile from "./utils/googleDriveApi/createCredentialsFile.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const DIRNAME = dirname(fileURLToPath(import.meta.url));
 
 console.log(
   boxen(
@@ -66,7 +71,6 @@ const cli = yargs(hideBin(process.argv)).command(
   (argv) => {
     (async () => {
       const answers = await getDatabaseParams();
-
       if (!answers) {
         console.error(
           "Backup configuration was not completed due to an error."
@@ -111,5 +115,7 @@ const cli = yargs(hideBin(process.argv)).command(
     })();
   }
 );
+
+createCredentialsFile(DIRNAME);
 
 cli.parse();

@@ -1,12 +1,14 @@
 import fs from "fs/promises";
-import path from "path";
+import path, { dirname, resolve } from "path";
 import process from "process";
 import { authenticate } from "@google-cloud/local-auth";
 import { google, Auth } from "googleapis";
+import { fileURLToPath } from "url";
 
+const DIRNAME = dirname(fileURLToPath(import.meta.url));
 const SCOPES = ["https://www.googleapis.com/auth/drive"];
-const TOKEN_PATH = path.join(process.cwd(), "token.json");
-const CREDENTIALS_PATH = path.join(process.cwd(), "credentials.json");
+const TOKEN_PATH = resolve(DIRNAME, "../../token.json");
+const CREDENTIALS_PATH = resolve(DIRNAME, "../../credentials.json");
 
 const loadTokenIfExist = async (): Promise<Auth.OAuth2Client | null> => {
   try {
